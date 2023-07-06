@@ -1,0 +1,47 @@
+version: '3.3'
+
+services:
+    transmission:
+        cap_add:
+            - NET_ADMIN
+        volumes:
+            - './config:/config'
+            - '/where_you_want_your_downloads_to_be:/data'
+            - '/where_your_movies_tv_shows_are_stored:/medias'
+        container_name: transmission
+        dns:
+            - 1.1.1.1
+            - 8.8.8.8
+        environment:
+            - OPENVPN_PROVIDER=PIA
+            - OPENVPN_CONFIG=france
+            - OPENVPN_USERNAME=your_username
+            - OPENVPN_PASSWORD=your_password
+            - LOCAL_NETWORK=192.168.0.0/24
+            - DISABLE_PORT_UPDATER=true
+#            - TRANSMISSION_WEB_UI=combustion
+            - TRANSMISSION_WEB_UI=flood-for-transmission
+            - TRANSMISSION_RPC_USERNAME=the_username_you_want
+            - TRANSMISSION_RPC_PASSWORD=the_password_you_want
+            - TRANSMISSION_RPC_AUTHENTICATION_REQUIRED=true
+            - TRANSMISSION_WATCH_DIR_ENABLED=false
+            - TRANSMISSION_DOWNLOAD_DIR=/data/completed
+            - TRANSMISSION_INCOMPLETE_DIR=/data/incomplete
+            - TRANSMISSION_INCOMPLETE_DIR_ENABLED=true
+            - TRANSMISSION_RPC_ENABLED=true
+            - TRANSMISSION_RPC_HOST_WHITELIST_ENABLED=false
+            - TRANSMISSION_RPC_BIND_ADDRESS=0.0.0.0
+            - TRANSMISSION_RPC_WHITELIST_ENABLED=false
+            - TRANSMISSION_RPC_WHITELIST=127.0.0.1
+            - TRANSMISSION_BLOCKLIST_ENABLED=false
+            - TRANSMISSION_DHT_ENABLED=true
+            - TRANSMISSION_RPC_PORT=9091
+            - TRANSMISSION_RPC_URL=/transmission/
+        logging:
+            driver: json-file
+            options:
+                max-size: 10m
+        ports:
+            - '9091:9091'
+        restart: always
+        image: haugene/transmission-openvpn:dev

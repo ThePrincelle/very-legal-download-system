@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+    radarr:
+        image: linuxserver/radarr:latest
+        container_name: radarr
+        environment:
+            - PUID=1000
+            - PGID=1000
+            - TZ=Europe/Paris
+        volumes:
+            - ./config:/config
+            - /where_your_movies_are:/movies
+            - /your_transmission_completed_folder:/downloads
+        network_mode: bridge
+        restart: unless-stopped
+        ports:
+            - 7879:7878
